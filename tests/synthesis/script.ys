@@ -1,0 +1,19 @@
+
+# Read the design
+read_verilog demo.v
+hierarchy -check -top test
+
+# High-level stuff
+proc; opt; fsm; opt; memory; opt
+
+# Mapping to internal cell library
+techmap; opt
+
+# ABC
+abc -sop
+
+clean
+
+show -viewer evince -format pdf
+
+write_json synth.json

@@ -1,0 +1,95 @@
+{
+  "creator": "Yosys 0.8+127 (git sha1 a2c51d50, gcc 7.3.0-3 -fPIC -O3)",
+  "modules": {
+    "test": {
+      "attributes": {
+        "top": 1,
+        "src": "demo.v:2"
+      },
+      "ports": {
+        "clock": {
+          "direction": "input",
+          "bits": [ 2 ]
+        },
+        "a": {
+          "direction": "input",
+          "bits": [ 3, 4, 5, 6 ]
+        },
+        "c": {
+          "direction": "output",
+          "bits": [ 7 ]
+        }
+      },
+      "cells": {
+        "$abc$82$auto$blifparse.cc:481:parse_blif$83": {
+          "hide_name": 1,
+          "type": "$sop",
+          "parameters": {
+            "DEPTH": 2,
+            "TABLE": 23205,
+            "WIDTH": 4
+          },
+          "attributes": {
+          },
+          "port_directions": {
+            "A": "input",
+            "Y": "output"
+          },
+          "connections": {
+            "A": [ 3, 4, 5, 6 ],
+            "Y": [ 8 ]
+          }
+        },
+        "$auto$simplemap.cc:420:simplemap_dff$81": {
+          "hide_name": 1,
+          "type": "$_DFF_P_",
+          "parameters": {
+          },
+          "attributes": {
+            "src": "demo.v:8"
+          },
+          "port_directions": {
+            "C": "input",
+            "D": "input",
+            "Q": "output"
+          },
+          "connections": {
+            "C": [ 2 ],
+            "D": [ 8 ],
+            "Q": [ 7 ]
+          }
+        }
+      },
+      "netnames": {
+        "$0\\c[0:0]": {
+          "hide_name": 1,
+          "bits": [ 8 ],
+          "attributes": {
+            "src": "demo.v:8"
+          }
+        },
+        "a": {
+          "hide_name": 0,
+          "bits": [ 3, 4, 5, 6 ],
+          "attributes": {
+            "src": "demo.v:4"
+          }
+        },
+        "c": {
+          "hide_name": 0,
+          "bits": [ 7 ],
+          "attributes": {
+            "src": "demo.v:5"
+          }
+        },
+        "clock": {
+          "hide_name": 0,
+          "bits": [ 2 ],
+          "attributes": {
+            "src": "demo.v:3"
+          }
+        }
+      }
+    }
+  }
+}
