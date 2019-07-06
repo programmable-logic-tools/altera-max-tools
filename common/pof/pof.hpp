@@ -6,7 +6,7 @@
 #include <string>
 #include <list>
 #include <iterator>
-#include "POFBlocks.hpp"
+#include "pofblocks.hpp"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ private:
     char magic[4];
     char version[4];
     uint32_t blockCount;
-    list<POFBlock> blocks;
+    list<POFBlocks::Generic*> blocks;
 
 public:
     /**
@@ -28,10 +28,21 @@ public:
      */
     POF()
     {
-        magic = "POF";
-        version = "\x00\x00\x01";
+        magic[0] = 'P';
+        magic[1] = 'O';
+        magic[2] = 'F';
+        magic[3] = 0;
+        version[0] = 0;
+        version[1] = 0;
+        version[2] = 1;
+        version[3] = 0;
         blockCount = 0;
     };
+
+    /**
+     * Initialize this object by importing a file
+     */
+    POF(string filename): POF() { importFromFile(filename); }
 
     /**
      * Free all allocated resources
@@ -40,13 +51,15 @@ public:
     {
         if (blockCount > 0)
         {
-            list<POFBlock>::iterator it;
+            list<POFBlocks::Generic*>::iterator it;
             for (it = blocks.begin(); it != blocks.end(); ++it)
             {
+                blockCount--;
                 delete *it;
             }
         }
     }
+
 
     /**
      * Import all object properties and blocks from a file
@@ -56,7 +69,7 @@ public:
     /**
      * Import all object properties from a binary stream
      */
-    void importFromStream(istream stream);
+    void importFromStream(istream& stream);
 
     /**
      * Save this POF object to a file
@@ -67,7 +80,12 @@ public:
      * Generate a binary stream from this POF object
      */
     void exportToStream(ostream stream);
+
+
+    /******* Getters and setters ******/
+
+    uint32_t getBlockCount() { return blockCount; }
 };
 
 
-#endif POF_HPP
+#endif
