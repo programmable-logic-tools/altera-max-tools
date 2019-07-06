@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <string>
 #include <list>
+#include <iostream>
+#include <istream>
 
 #include "bytestream.hpp"
 
@@ -24,6 +26,8 @@ namespace POFBlocks
         PROGRAMMING_DATA = 17,
     } pofblock_type_e;
 
+    typedef uint16_t blocktype_t;
+    typedef uint32_t blocksize_t;
 
     /**
      * This is the parent class for all data blocks within an Altera POF file
@@ -31,31 +35,35 @@ namespace POFBlocks
     class Generic
     {
     private:
-        pofblock_type_e type = UNDEFINED;
-        uint32_t size = 0;
+        blocktype_t blockType = UNDEFINED;
+        blocksize_t blockSize = 0;
 
     public:
-        Generic (istream& stream);
+        Generic(blocktype_t type, blocksize_t size)
+        {
+            blockType = type;
+            blockSize = size;
+        }
     };
 
 
     /**
      * This block type stores the software that created the file
      */
-    class CreatorSoftware : public Generic
+    class CreatorSoftware: public Generic
     {
     private:
         string software = "";
 
     public:
-        CreatorSoftware (istream& stream);
+        CreatorSoftware(blocktype_t, blocksize_t, istream&);
     };
 
 
     /**
      * This block stores the actual data to be written to the target device
      */
-    class ProgrammingData : public Generic
+    class ProgrammingData: public Generic
     {
     private:
         uint32_t startAddress = 0;
@@ -63,8 +71,14 @@ namespace POFBlocks
         ByteStream data;
 
     public:
-        ProgrammingData (istream& stream);
+        ProgrammingData(blocktype_t, blocksize_t, istream& stream);
     };
+
+
+    /**
+     * Parse the input stream and create ob object of the corresponding block type
+     */
+    Generic* importBlock(istream&);
 
 } // end namespace
 

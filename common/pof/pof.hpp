@@ -85,6 +85,12 @@ public:
     /******* Getters and setters ******/
 
     uint32_t getBlockCount() { return blockCount; }
+
+    void appendBlock(POFBlocks::Generic* block)
+    {
+        blocks.push_back(block);
+        blockCount++;
+    }
 };
 
 
