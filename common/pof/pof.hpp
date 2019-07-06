@@ -84,8 +84,14 @@ public:
 
     /******* Getters and setters ******/
 
+    /**
+     * Get the total number of POF blocks in this file
+     */
     uint32_t getBlockCount() { return blockCount; }
 
+    /**
+     * Append a new POF block to our list of content blocks
+     */
     void appendBlock(POFBlocks::Generic* block)
     {
         blocks.push_back(block);

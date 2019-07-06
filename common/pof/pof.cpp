@@ -29,9 +29,9 @@ void POF::importFromStream(istream& stream)
     stream.read((char*) &blockCount, 4);
     cout << "Block count: " << blockCount << endl;
 
-    if ((blockCount < 2) || (blockCount > 6))
+    if ((blockCount < 2) || (blockCount > 8))
     {
-        cerr << "Warning: Unusual number of blocks: " << blockCount << endl;
+        cerr << "Warning: Suspicious number of blocks: " << blockCount << endl;
     }
 
     // Import blocks

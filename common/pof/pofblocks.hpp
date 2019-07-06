@@ -61,6 +61,19 @@ namespace POFBlocks
 
 
     /**
+     * This block type stores the model number of the target device
+     */
+    class TargetDevice: public Generic
+    {
+    private:
+        string targetDevice = "";
+
+    public:
+        TargetDevice(blocktype_t, blocksize_t, istream&);
+    };
+
+
+    /**
      * This block stores the actual data to be written to the target device
      */
     class ProgrammingData: public Generic

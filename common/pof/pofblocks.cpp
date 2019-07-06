@@ -12,22 +12,33 @@ Generic* POFBlocks::importBlock(istream& stream)
      * because we need to peek into the stream
      * before we can know which class to instantiate
      */
-    Generic* block = NULL;
 
     blocktype_t blockType;
-    blocksize_t blockSize;
-
     stream.read((char*) &blockType, 2);
     cout << "Block type: " << blockType << endl;
+
+    blocksize_t blockSize;
     stream.read((char*) &blockSize, 4);
     cout << "Block size: " << blockSize << endl;
+
+    Generic* block = NULL;
 
     switch(blockType)
     {
         case CREATOR_SOFTWARE:
             block = new CreatorSoftware(blockType, blockSize, stream);
             break;
+
+        case TARGET_DEVICE:
+            block = new TargetDevice(blockType, blockSize, stream);
+            break;
+
         // TODO: Support more block types
+
+        default:
+            cerr << "Error: Unsupported block type: "<< blockType << endl;
+            exit(1);
+            break;
     }
 
     return block;
@@ -37,10 +48,23 @@ Generic* POFBlocks::importBlock(istream& stream)
 CreatorSoftware::CreatorSoftware(blocktype_t type, blocksize_t size, istream& stream)
     :Generic(type, size)
 {
-    cout << "Block stores the software, which created this file: ";
+    cout << "Creator software: ";
     char* buffer = new char[200];
     stream.read(buffer, size);
     software = buffer;
+    delete buffer;
     cout << software << endl;
+}
+
+
+TargetDevice::TargetDevice(blocktype_t type, blocksize_t size, istream& stream)
+    :Generic(type, size)
+{
+    cout << "Target device: ";
+    char* buffer = new char[200];
+    stream.read(buffer, size);
+    targetDevice = buffer;
+    delete buffer;
+    cout << targetDevice << endl;
 }
 
