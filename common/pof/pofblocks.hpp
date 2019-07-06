@@ -21,7 +21,7 @@ namespace POFBlocks
         CREATOR_SOFTWARE = 1,
         TARGET_DEVICE = 2,
         PROJECT_NAME = 3,
-        SECURITY_SWITCH = 5,
+        SECURITY = 5,
         CHECKSUM = 8,
         PROGRAMMING_DATA = 17,
     } pofblock_type_e;

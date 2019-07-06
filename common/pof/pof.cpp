@@ -35,6 +35,8 @@ void POF::importFromStream(istream& stream)
     }
 
     // Import blocks
+    // Reset count, since append also counts up
+    blockCount = 0;
     while (stream.peek() != EOF)
     {
         cout << "Importing block..." << endl;

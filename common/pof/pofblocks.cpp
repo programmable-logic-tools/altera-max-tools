@@ -36,8 +36,10 @@ Generic* POFBlocks::importBlock(istream& stream)
         // TODO: Support more block types
 
         default:
-            cerr << "Error: Unsupported block type: "<< blockType << endl;
-            exit(1);
+            cerr << "Warning: Skipping unsupported block type: "<< blockType << endl;
+            char* buffer = new char[blockSize];
+            stream.read(buffer, blockSize);
+            delete buffer;
             break;
     }
 
