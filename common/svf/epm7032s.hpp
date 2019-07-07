@@ -44,9 +44,6 @@ protected:
      * that erases all pages in the target device's flash memory
      */
     void bulkErase();
-    /*
-     */
-
 
     /**
      * This method appends a sequence to the SVF stream
