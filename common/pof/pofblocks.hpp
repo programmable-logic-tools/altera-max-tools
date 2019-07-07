@@ -8,7 +8,7 @@
 #include <iostream>
 #include <istream>
 
-#include "bytestream.hpp"
+#include "bitstream.hpp"
 
 using namespace std;
 
