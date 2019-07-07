@@ -7,10 +7,12 @@
 int main()
 {
     Bitstream b(15033);
-//    b.setBitCount(15033);
 
     SVF::EPM7032S f(&b);
-    f.saveToFile("test.svf");
+    f.generateSequence();
+//    f.saveToFile("test.svf");
+
+    cout << f;
 
     return 0;
 }

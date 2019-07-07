@@ -11,22 +11,29 @@ namespace SVF
 class EPM7032S: public SVFFile
 {
 public:
-    EPM7032S() :SVFFile() {};
-    EPM7032S(Bitstream* b) :SVFFile(b) {};
+    EPM7032S() :SVFFile() { setupRegisterWidths(); };
+    EPM7032S(Bitstream* b) :EPM7032S() { importBitstream(b); };
+    virtual ~EPM7032S() {};
+
+    /**
+     * Overload the parent class's generator method
+     *
+     * See also:
+     * MAX7000 Programmable Logic Device Family datasheet, page 17: Programming Sequence
+     */
+    virtual void generateSequence();
 
 protected:
-    /** Enter ISP mode */
+    /**
+     * IEEE 1532 instructions
+     */
     const uint16_t IR_ISC_ENABLE = 0x71;
     const uint16_t IR_ISC_DISABLE = 0x79;
     // ISC_PROGRAM?
     // ISC_NOOP?
+    const uint16_t IR_01E = 0x3E;
 
-    virtual void setupRegisterWidths()
-    {
-        setIRWidth(10);
-        setDRWidth(IR_ISC_ENABLE, 0);
-        setDRWidth(IR_ISC_DISABLE, 0);
-    }
+    virtual void setupRegisterWidths();
 
     /**
      * This method appends an SVF header
@@ -52,6 +59,11 @@ protected:
     void program();
 
     /**
+     * The flash programming consists of n flash page writes
+     */
+    void programPage();
+
+    /**
      * This method appends a sequence to the SVF stream
      * that checks the correctness of every bit
      * in the target device's flash memory
@@ -63,28 +75,9 @@ protected:
      */
     void exitISP();
 
-    /**
-     * Overload the parent class's generator method
-     *
-     * See also:
-     * MAX7000 Programmable Logic Device Family datasheet, page 17: Programming Sequence
-     */
-    virtual void generateSequence()
-    {
-        clearSequence();
-
-        svf << "! Target device: Altera MAX7032S CPLD (EPM7032S)";
-        svf << "!" << endl;
-
-        enterISP();
-        checkSiliconID();
-        bulkErase();
-        program();
-        verify();
-        exitISP();
-    }
 }; // end class
 
 } // end namespace
+
 
 #endif

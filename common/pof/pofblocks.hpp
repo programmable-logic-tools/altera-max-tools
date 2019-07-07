@@ -81,7 +81,7 @@ namespace POFBlocks
     private:
         uint32_t startAddress = 0;
         uint32_t size = 0;
-        ByteStream data;
+        Bitstream* data;
 
     public:
         ProgrammingData(blocktype_t, blocksize_t, istream& stream);

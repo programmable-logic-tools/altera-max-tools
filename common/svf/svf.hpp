@@ -32,37 +32,37 @@ protected:
     map<uint16_t, uint16_t> drWidths;
 
 public:
-    SVFFile() { setupRegisterWidths(); bitstream = NULL; clearSequence(); }
-    SVFFile(Bitstream* b) :SVFFile() { importBitstream(b); }
+    SVFFile() { bitstream = NULL; }
+    SVFFile(Bitstream* b) { importBitstream(b); }
 
     /**
      * Use this method to import a bitstream
      * after the object has been initialized
      */
-    void importBitstream(Bitstream* b) { bitstream = b; generateSequence(); }
+    void importBitstream(Bitstream* b) { bitstream = b; }
+
+    /**
+     * Generate the appropriate sequence of JTAG transactions
+     * to program the target device
+     *
+     * This method must be overloaded by the child classes.
+     */
+    virtual void generateSequence() = 0;
+
+    /**
+     * Remove all lines from the SVF buffer
+     */
+    void clearSequence() { svf.str(""); }
 
     /**
      * Output the generated SVF to a stream
      */
-    void exportToStream(ostream& stream) { stream << svf.str(); }
+    void exportToStream(ostream& stream);
 
     /**
      * Output the generated SVF to a file
      */
-    void saveToFile(string filename)
-    {
-        // Open file as stream
-        ofstream f(filename);
-        if (f.fail())
-        {
-            cerr << "Error: Failed to open " << filename << " for writing." << endl;
-            return;
-        }
-        // Write the SVF to the file
-        exportToStream(f);
-        // Close the file
-        f.close();
-    }
+    void saveToFile(string filename);
 
 protected:
     /**
@@ -71,33 +71,45 @@ protected:
      */
     void setIRWidth(uint16_t width) { irWidth = width; }
 
+    uint16_t getIRWidth() { return irWidth; }
+
     /**
      * This defines the bit width of the data register
      * selected by the specified instruction register value
      */
     void setDRWidth(uint16_t ir, uint16_t width) { drWidths.insert(make_pair(ir, width)); }
 
+    uint16_t getDRWidth(uint16_t r) { return drWidths[r]; }
+
     /**
      * The child classes must implement a method
      * that sets up all used registers of the corresponding target device
      * in order to be able to use the SVF instruction macros
      */
-    virtual void setupRegisterWidths() {};
+    virtual void setupRegisterWidths() = 0;
+
+
+    /********* SVF macros (IEEE 1532) *********/
+
+    static string state(string state);
+    static string runtest(uint32_t run_count, string run_clk);
+
+    uint16_t currentIRValue = 0;
+    string sir(uint16_t ir);
+    string sdr(uint16_t dr);
 
     /**
-     * Generate the appropriate sequence of JTAG transactions
-     * to program the target device
-     *
-     * This method must be overloaded by the child classes.
+     * Creates a SVF-conform hexadecimal representation
+     * of the value including the least significant n bits
      */
-    virtual void generateSequence() {}
-
-    /**
-     * Remove all lines from the SVF buffer
-     */
-    void clearSequence() { svf.str(""); }
-
+    static string hexfill(uint32_t value, uint8_t bits);
 };
+
+
+/**
+ * Allows to output a SVF-formatted string e.g. to stdout
+ */
+ostream& operator<<(ostream& stream, SVFFile& f);
 
 
 #endif
