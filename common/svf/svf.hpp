@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 #include "bitstream.hpp"
 
 using namespace std;
@@ -17,40 +18,33 @@ using namespace std;
  */
 class SVFFile
 {
-private:
+protected:
     /** Our bitstream */
     Bitstream* bitstream = NULL;
 
     /** Our SVF sequence */
     ostringstream svf;
 
-public:
-    SVFFile() { bitstream = NULL; clearSequence(); }
-    SVFFile(Bitstream* b) { importBitstream(b); }
+    /** Instruction register bit width */
+    uint16_t irWidth = 0;
 
-    /**
-     * Remove all lines from the SVF buffer
-     */
-    void clearSequence() { svf.str(""); }
+    /** Data register bit widths */
+    map<uint16_t, uint16_t> drWidths;
+
+public:
+    SVFFile() { setupRegisterWidths(); bitstream = NULL; clearSequence(); }
+    SVFFile(Bitstream* b) :SVFFile() { importBitstream(b); }
 
     /**
      * Use this method to import a bitstream
      * after the object has been initialized
      */
-    void importBitstream(Bitstream* b) { bitstream = b; generateJtagSequence(); }
-
-    /**
-     * Generate the appropriate sequence of JTAG transactions
-     * to program the target device
-     *
-     * This method must be overloaded by the child classes.
-     */
-    virtual void generateJtagSequence() {}
+    void importBitstream(Bitstream* b) { bitstream = b; generateSequence(); }
 
     /**
      * Output the generated SVF to a stream
      */
-    void exportToStream(ostream& stream) { stream << svf; }
+    void exportToStream(ostream& stream) { stream << svf.str(); }
 
     /**
      * Output the generated SVF to a file
@@ -69,6 +63,41 @@ public:
         // Close the file
         f.close();
     }
+
+protected:
+    /**
+     * This defines the bit width of the instruction register
+     * of the target device's JTAG machine
+     */
+    void setIRWidth(uint16_t width) { irWidth = width; }
+
+    /**
+     * This defines the bit width of the data register
+     * selected by the specified instruction register value
+     */
+    void setDRWidth(uint16_t ir, uint16_t width) { drWidths.insert(make_pair(ir, width)); }
+
+    /**
+     * The child classes must implement a method
+     * that sets up all used registers of the corresponding target device
+     * in order to be able to use the SVF instruction macros
+     */
+    virtual void setupRegisterWidths() {};
+
+    /**
+     * Generate the appropriate sequence of JTAG transactions
+     * to program the target device
+     *
+     * This method must be overloaded by the child classes.
+     */
+    virtual void generateSequence() {}
+
+    /**
+     * Remove all lines from the SVF buffer
+     */
+    void clearSequence() { svf.str(""); }
+
 };
+
 
 #endif

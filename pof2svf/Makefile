@@ -1,12 +1,12 @@
 
 include ../config.mk
 
-TARGET = pofunpack
-SRCS = $(wildcard *.cpp ../common/*.cpp ../common/pof/*.cpp)
+TARGET = pof2svf
+SRCS = $(wildcard *.cpp ../common/*.cpp ../common/svf/*.cpp)
 OBJS = $(SRCS:.cpp=.o)
 
 CXXFLAGS += -I../common
-CXXFLAGS += -I../common/pof
+CXXFLAGS += -I../common/svf
 
 
 all: $(TARGET)

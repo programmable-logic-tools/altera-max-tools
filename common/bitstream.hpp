@@ -24,6 +24,12 @@ private:
     uint32_t bitCount = 0;
 
 public:
+    Bitstream(uint32_t bitCount) { setBitCount(bitCount); }
+    ~Bitstream()
+    {
+        if (data != NULL)
+            free(data);
+    }
 
     /************* Getters and setters ************/
 
@@ -36,7 +42,14 @@ public:
      * Sets the number of bits in this bitstream
      * and adjusts the buffer size accordingly
      */
-    void setBitCount(uint32_t newCount);
+    void setBitCount(uint32_t newCount)
+    {
+        bitCount = newCount;
+        // TODO: Do not discard already stored content
+        if (data != NULL)
+            free(data);
+        data = (char*) malloc(getByteCount());
+    }
 
     /**
      * Gets the number of bytes required to store this bitstream
@@ -65,7 +78,7 @@ public:
         uint8_t b = getByte(index / 8);
         uint8_t remainder = index % 8;
         uint8_t mask = (0x80 >> remainder);
-        return (b & mask > 0) ? true : false;
+        return ((b & mask) > 0) ? true : false;
     }
 
     /**

@@ -1,7 +1,7 @@
 
 include config.mk
 
-SUBDIRS = pofunpack
+SUBDIRS = pofunpack pof2svf
 
 all: $(addsuffix .all,$(SUBDIRS))
 $(addsuffix .all,$(SUBDIRS)):
