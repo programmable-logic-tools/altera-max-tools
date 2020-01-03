@@ -1,0 +1,30 @@
+/**
+ * Example configuration for an Altera MAX7032S CPLD
+ */
+
+device_family = max7000s;
+device_type = epm7032s;
+package_type = plcc;
+package_pin_count = 44;
+speed_grade = 5;
+isp_via_jtag_enabled = true;
+jtag_bst_enabled = true;
+readback_protection_enabled = false;
+
+logic_cell[1].register_bypass = false;
+logic_cell[1].fast_input_select = false;
+logic_cell[1].clock_and_enable_select = global_clock_and_local_enable;
+logic_cell[1].global_clock_select = gclk1;
+logic_cell[1].clear_select = gclr;
+logic_cell[1].xor_enable = true;
+
+/*
+// Sample configuration of a product term 
+logic_cell[1].product_term[1].output_enabled = true;
+logic_cell[1].product_term[1].input[lab_signal[20]].enabled = true;
+logic_cell[1].product_term[1].input[lab_signal[20]].inverted = true;
+
+// Sample configuration for the inclusion of a SEXP signal in a product term
+logic_cell[1].product_term[1].input[shared_logic_expander[3]].enabled = true;
+logic_cell[1].product_term[1].input[shared_logic_expander[3]].inverted = true;
+*/

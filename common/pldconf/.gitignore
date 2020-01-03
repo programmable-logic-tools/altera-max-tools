@@ -1,0 +1,8 @@
+
+# FASM/Bison generated files
+*.tab.c
+*.tab.h
+*.yy.c
+pldconf
+a.out
+

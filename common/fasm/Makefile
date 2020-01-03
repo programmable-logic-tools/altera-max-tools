@@ -3,15 +3,19 @@
 all: fasm
 
 run: fasm
-	cat tests/test1.asc | ./fasm
+	cat tests/test.fasm | ./fasm
 
 fasm: fasm.tab.c lex.yy.c
-	gcc lex.yy.c -lfl -o $@
+	gcc fasm.tab.c lex.yy.c -lfl -o $@
 
-fasm.tab.c: fasm.y
+fasm.tab.c: bison
+yacc: bison
+bison: fasm.y
 	bison -d $^
 
-lex.yy.c: fasm.l
+lex.yy.c: flex
+lex: flex
+flex: fasm.l
 	flex $^
 
 .PHONY: clean
