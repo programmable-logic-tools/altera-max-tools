@@ -1,29 +1,28 @@
 # FASM syntax for the Altera MAX7000 series
 
-This document describes a syntax for text-based configuration of a MAX7000 series programmable logic device.
-The FASM file is intended as the bridge between place-and-route software and bitstream writer.
+This document describes a low-level but still human-readable syntax
+for the configuration of an Altera MAX7000S series programmable logic device.
+FASM files are intended as an intermediate step between place-and-routed design and bitstream writer.
+A FASM file consists of lines of key-value assignments.
+During parsing of the file those assignments are applied on top of the default configuration for a device,
+such that all configurable elements (features) of that device are assigned their respective desired value.
 
 ## Goal
 
 The syntax aims to follow <a href="https://github.com/SymbiFlow/fasm/blob/master/docs/specification.rst">mithro's FASM syntax guideline</a>.
 
 * The device configuration is split into "features".
+* Every feature may only be assigned a value once.
+* The order in which assignments occur, does not change the resulting bitstream.
 * Every feature has a hardware equivalent in the device.
 * Every feature corresponds to one or more bits in the bitstream.
 * Only one feature is configured per line.
-* The default value for a feature is 'disabled' or '0'.
-* When a feature is named in a FASM file line without assignment of a concrete value, then the implicit assignment is 'enabled' or '1'.
-* In the FASM file a disabled feature is represented by a '0', an enabled feature by a '1'.
-This definition applies regardless of whether the corresponding bit in the bitstream will be '0' or '1'.
-For example, when an enabled feature corresponds to a '0' bit in the bitstream,
-then the corresponding feature in the FASM file shall still be assigned a value of '1'.
-The bitstream writer will take care of flipping those bits where necessary.
+* The assigned value is not changed, before it is written to the bitstream.
 
 ## Note
 
 Please note, that as the reverse-engineering of the MAX7000 series devices is still in progress,
 so this document may be subject to fundamental changes.
-Please get in touch with the author if you require a stable version.
 
 ## Top-level block types
 
