@@ -1,9 +1,25 @@
-# Eclipse files
+
+# Bitstreams
+*.bit
+*.pof
+
+# Notes
+*.ods
+*.odt
+
+# Temporary
+*.tmp
+.*.swp
+.~lock.*
+
+# IDE
 .project
 .cproject
 .pydevproject
 .settings
 .metadata
+.cursor
+.cursorignore
 
 # Prerequisites
 *.d
@@ -37,3 +53,5 @@
 *.exe
 *.out
 *.app
+*.bin
+*.elf
