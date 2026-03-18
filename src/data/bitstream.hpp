@@ -11,8 +11,8 @@ using namespace std;
 
 
 /**
- * This class stores a bitstream
- * and makes all bits accessible individually
+ * A class for creation and manipulation
+ * of a generic bitstream
  *
  * The MSB at index 0.
  * The MSB within a byte is the left-most (mask: 0x80).

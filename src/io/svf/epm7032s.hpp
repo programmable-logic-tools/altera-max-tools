@@ -31,7 +31,14 @@ protected:
     const uint16_t IR_ISC_DISABLE = 0x79;
     // ISC_PROGRAM?
     // ISC_NOOP?
-    const uint16_t IR_01E = 0x3E;
+    const uint16_t IR_01E = 0x3E;  // Select flash cell column?
+    0x22 // Shift data from left(?) EEPROM half(?)
+    0x26 // Shift data from right(?) EEPROM half(?)
+    0x12
+    0x16
+    0x1A
+    0x32 // Load LSBs from EEPROM word(?)
+    0x36 // Load MSBs from EEPROM word(?)
 
     virtual void setupRegisterWidths();
 
